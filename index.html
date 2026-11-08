@@ -432,10 +432,12 @@ function jumpToTraining(gi,si){
  const all=steps(), target=all.findIndex(x=>x.gi===gi&&x.si===si);
  if(target<0)return;
  tick();
- state.running=false;state.lastTick=null;state.finished=false;
- state.index=target;state.remain=all[target].min*60;
+ // The row tap is a user gesture: unlock iOS audio and immediately start preparation.
+ unlockVoice();unlockCueAudio();
+ state.index=target;state.remain=all[target].min*60;state.finished=false;
  setPreparation(target);
- announce(`${all[target].name} 단계로 이동했습니다. 준비 시간 ${state.prepTotal}초입니다.`);
+ state.running=true;state.lastTick=Date.now();
+ announce(`${all[target].name} 훈련 준비 시간입니다. ${state.prepTotal}초 후 시작합니다.`);
  syncAccordion();save();paint();
  document.querySelector('.timer-heading')?.scrollIntoView({behavior:'smooth',block:'start'});
 }
