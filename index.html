@@ -201,6 +201,7 @@ const today=()=>{const d=new Date();return `${d.getFullYear()}-${String(d.getMon
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){console.warn('저장 실패',e)}};
 function ensureDay(){let k=today();return state.history[k]||(state.history[k]={seconds:0,metrics:[0,0,0,0,0,0,0],completed:0});}
 function addTime(seconds){if(seconds<=0)return;ensureDay().seconds+=seconds;state.sessionSeconds+=seconds;}
+let pendingReminder=null;
 function tick(){if(!state.running)return;const now=Date.now();let delta=Math.max(0,Math.min((now-(state.lastTick||now))/1000,86400));state.lastTick=now;
  while(delta>0&&state.running){
   if(state.phase==='prep'){
@@ -211,13 +212,30 @@ function tick(){if(!state.running)return;const now=Date.now();let delta=Math.max
    for(const threshold of reminderThresholds){if(before>threshold&&state.remain<=threshold&&!state.reminders.includes(threshold)){
     state.reminders.push(threshold);
     const msg=threshold>=60?`${Math.round(threshold/60)}분 남았습니다.`:'10초 남았습니다.';
-    announce(msg);
+    pendingReminder=msg;
    }}
    if(state.remain<=.0001)finishStep();
   }
  }
+ if(pendingReminder){announce(pendingReminder);pendingReminder=null;}
  save();paint();}
-function announce(message){const el=$('#voiceCaption');el.textContent=message;if($('#voice').checked&&'speechSynthesis' in window){try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(message);u.lang='ko-KR';speechSynthesis.speak(u)}catch(e){}}}
+let voiceReady=false;
+function unlockVoice(){if(!('speechSynthesis' in window))return;voiceReady=true;try{speechSynthesis.getVoices();speechSynthesis.resume();}catch(e){}}
+function announce(message){
+ const el=$('#voiceCaption');el.textContent=message;
+ if(!$('#voice').checked||!('speechSynthesis' in window))return;
+ try{
+  const synth=window.speechSynthesis;
+  synth.cancel();
+  const u=new SpeechSynthesisUtterance(message);u.lang='ko-KR';u.rate=1;u.volume=1;
+  const voices=synth.getVoices();const ko=voices.find(v=>v.lang.toLowerCase()==='ko-kr')||voices.find(v=>v.lang.toLowerCase().startsWith('ko'));
+  if(ko)u.voice=ko;
+  u.onerror=e=>console.warn('음성 안내 실패:',e.error);
+  synth.speak(u);
+  if(synth.paused)synth.resume();
+ }catch(e){console.warn('음성 안내 실패:',e)}
+} 
+
 function syncAccordion(){const current=steps()[state.index];if(!current)return;$$('#trainSteps .group').forEach((g,i)=>{const on=i===current.gi;g.classList.toggle('expanded',on);g.querySelector('.group-head')?.setAttribute('aria-expanded',String(on));g.querySelectorAll('.substep').forEach((row,j)=>{row.classList.toggle('is-current',on&&j===current.si);row.classList.toggle('is-done',steps().findIndex(x=>x.gi===i&&x.si===j)<state.index)})})}
 function finishStep(){const all=steps();if(!all.length)return;const item=all[state.index];if(item){state.done.push({name:item.name,group:GROUPS[item.gi],at:new Date().toISOString()});ensureDay().completed++;}
  if(state.index>=all.length-1){state.running=false;state.finished=true;state.remain=0;}else{state.index++;state.remain=all[state.index].min*60;state.phase="prep";state.prepRemain=PREP_SECONDS;state.reminders=[];}
@@ -244,9 +262,10 @@ function reset(){state.phase='prep';state.prepRemain=PREP_SECONDS;state.reminder
 // Existing visual and tab structure
 $$('nav [data-tab]').forEach(b=>b.addEventListener('click',()=>{$$('nav [data-tab]').forEach(x=>x.classList.toggle('active',x===b));$$('main section').forEach(x=>x.hidden=x.id!==b.dataset.tab);if(b.dataset.tab==='history')renderHistory()}));
 $$('.group-head').forEach(h=>{const toggle=()=>{const g=h.closest('.group');g.classList.toggle('expanded');h.setAttribute('aria-expanded',String(g.classList.contains('expanded')))};h.addEventListener('click',toggle);h.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggle()}})});
-$('#play').addEventListener('click',()=>{if(state.finished)reset();else tick();state.running=!state.running;state.lastTick=state.running?Date.now():null;announce(state.running?(state.phase==='prep'?`${steps()[state.index].name} 훈련 준비 시간입니다. 30초 후 시작합니다.`:`${steps()[state.index].name} 훈련을 이어갑니다.`):'타이머가 일시정지되었습니다.');save();paint()});
+$('#play').addEventListener('click',()=>{unlockVoice();if(state.finished)reset();else tick();state.running=!state.running;state.lastTick=state.running?Date.now():null;announce(state.running?(state.phase==='prep'?`${steps()[state.index].name} 훈련 준비 시간입니다. 30초 후 시작합니다.`:`${steps()[state.index].name} 훈련을 이어갑니다.`):'타이머가 일시정지되었습니다.');save();paint()});
+$('#voice').addEventListener('change',()=>{if($('#voice').checked){unlockVoice();announce('음성 안내가 켜졌습니다.');}});
 $('#reset').addEventListener('click',()=>{tick();state.running=false;state.lastTick=null;state.finished=false;state.remain=steps()[state.index].min*60;state.phase='prep';state.prepRemain=PREP_SECONDS;state.reminders=[];announce('현재 구간 타이머를 초기화했습니다.');save();paint()});
-$('#next').addEventListener('click',()=>{tick();if(!state.finished){finishStep();save();paint()}});$('#prev').addEventListener('click',()=>{tick();if(state.index<=0)return;state.index--;state.remain=steps()[state.index].min*60;state.phase='prep';state.prepRemain=PREP_SECONDS;state.reminders=[];state.finished=false;state.running=false;state.lastTick=null;const removed=state.done.pop();if(removed){const day=removed.at?.slice(0,10);if(day&&state.history[day])state.history[day].completed=Math.max(0,(state.history[day].completed||0)-1)}announce(`${steps()[state.index].name} 이전 단계로 이동했습니다.`);syncAccordion();save();paint()});
+$('#next').addEventListener('click',()=>{unlockVoice();tick();if(state.finished)return;if(state.phase==='prep'){state.phase='work';state.prepRemain=0;state.reminders=[];announce(`${steps()[state.index].name} 훈련을 시작합니다.`);}else{finishStep();}state.lastTick=state.running?Date.now():null;save();paint()});$('#prev').addEventListener('click',()=>{tick();if(state.index<=0)return;state.index--;state.remain=steps()[state.index].min*60;state.phase='prep';state.prepRemain=PREP_SECONDS;state.reminders=[];state.finished=false;state.running=false;state.lastTick=null;const removed=state.done.pop();if(removed){const day=removed.at?.slice(0,10);if(day&&state.history[day])state.history[day].completed=Math.max(0,(state.history[day].completed||0)-1)}announce(`${steps()[state.index].name} 이전 단계로 이동했습니다.`);syncAccordion();save();paint()});
 $$('[data-add]').forEach(b=>b.addEventListener('click',()=>{tick();state.remain=Math.max(1,state.remain+Number(b.dataset.add));save();paint()}));
 $('#saveMetrics').addEventListener('click',()=>{ensureDay().metrics=$$('#train input[type=number]').slice(0,7).map(e=>Math.max(0,Number(e.value)||0));save();const b=$('#saveMetrics');b.textContent='저장 완료 ✓';setTimeout(()=>b.textContent='학습량 저장',1200)});
 function readEditor(){state.groups.forEach((g,gi)=>g.forEach((x,si)=>{const n=$(`#editor input[type=text][data-gi="${gi}"][data-si="${si}"]`),m=$(`#editor input[type=number][data-gi="${gi}"][data-si="${si}"]`);if(n)x.name=n.value.trim()||x.name;if(m)x.min=Math.max(1,Math.min(240,Math.round(Number(m.value)||1)))}));}
