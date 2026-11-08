@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+
+<html lang="ko"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/><meta content="#101116" name="theme-color"/><title>English PT · Mobile</title><style>
+:root{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#0c1220;color:#eef3ff;color-scheme:dark}*{box-sizing:border-box}body{margin:0;padding:env(safe-area-inset-top) 14px calc(25px + env(safe-area-inset-bottom))}main{max-width:740px;margin:auto}header{padding:24px 4px 8px}h1{font-size:26px;margin:3px 0}h2{font-size:18px;margin:0 0 14px}.muted,small{color:#a8b8d0}small{font-size:12px}.card{background:#172235;border:1px solid #30415b;border-radius:19px;padding:18px;margin:14px 0}.row{display:flex;align-items:center;justify-content:space-between;gap:10px}.stack{display:grid;gap:10px}.clock{text-align:center;font-size:clamp(68px,15vw,110px);font-weight:800;letter-spacing:-3px;font-variant-numeric:tabular-nums;margin:20px 0}.progress{height:9px;border-radius:12px;background:#34465e;overflow:hidden}.bar{height:100%;background:#86aaff;width:0}.buttons{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}button,input,select{font:inherit}button{border:1px solid #465b78;border-radius:12px;padding:12px 10px;background:#263751;color:#f1f5ff;font-weight:650;min-height:44px;cursor:pointer}button.primary{background:#86aaff;color:#101827;border-color:#86aaff}button:disabled{opacity:.45}button:focus-visible,input:focus-visible{outline:2px solid #a7c4ff}nav{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:14px}nav button.active{background:#86aaff;color:#101827}section[hidden]{display:block}.step{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;border-bottom:1px solid #30415b;padding:12px 0}.step:last-child{border:0}.step input[type=text],.step input[type=number],.metric input{background:#101b2d;color:#fff;border:1px solid #526582;border-radius:9px;padding:10px;width:100%;min-width:0}.step input[type=number]{width:80px}.step .controls{display:flex;gap:5px;align-items:center}.step .controls button{min-width:44px;padding:9px}.metric{display:grid;grid-template-columns:1fr 110px;align-items:center;gap:10px;padding:8px 0}.goal{display:flex;gap:10px;align-items:center;padding:9px 0}.goal input{width:20px;height:20px;accent-color:#86aaff}.day{padding:12px 0;border-bottom:1px solid #34465e}.day:last-child{border:0}.stat{font-size:25px;font-weight:750}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.statbox{background:#223149;border-radius:12px;padding:12px 7px;text-align:center}.help{font-size:12px;line-height:1.6;color:#a8b8d0}.danger{color:#ffb5b5}.tag{font-size:12px;background:#2b405e;padding:6px 10px;border-radius:20px}@media(max-width:420px){.card{padding:14px}.buttons button{padding:10px 4px}.step .controls{flex-wrap:wrap;justify-content:end}.stats{gap:5px}.stat{font-size:21px}}.preview-label{font-size:12px;letter-spacing:1px;color:#86aaff;margin:25px 0 0}.preview-note{padding:10px 12px;background:#223149;border-radius:12px;color:#b8c9e4;font-size:13px;margin:10px 0}button,input{pointer-events:none}
+.group{border:1px solid #344963;border-radius:15px;margin:12px 0;overflow:hidden}.group-head{display:flex;align-items:center;justify-content:space-between;background:#22334d;padding:13px 14px;gap:8px}.group-head b{font-size:15px}.group-head small{display:block;margin-top:3px}.group-body{padding:0 13px}.substep{display:flex;align-items:center;gap:11px;padding:12px 0;border-bottom:1px solid #30415b}.substep:last-child{border-bottom:0}.subnum{display:grid;place-items:center;flex:0 0 26px;width:26px;height:26px;border-radius:9px;background:#304666;color:#c9dbff;font-size:12px;font-weight:750}.subcontent{flex:1;min-width:0}.subcontent b{font-size:14px}.subcontent small{display:block;margin-top:3px}.duration{font-size:12px;color:#b8c9e4;white-space:nowrap}.group-editor .subcontent input{background:#101b2d;border:1px solid #526582;border-radius:8px;padding:9px;color:white;width:100%;font-size:14px}.group-editor .duration input{width:52px;background:#101b2d;border:1px solid #526582;border-radius:8px;padding:9px;color:white;text-align:center}.hierarchy-note{font-size:12px;color:#a8b8d0;margin:8px 0 12px}
+/* Compact hierarchy */
+.group{margin:9px 0;border-color:#30415b}.group-head{background:#1c2b40;padding:12px 13px}.group-head small{display:none}.group-head b{font-size:15px}.group-body{padding:0 14px}.substep{padding:9px 0;gap:8px}.subnum{display:none}.subcontent b{font-size:13px;font-weight:550}.subcontent small{display:none}.duration{font-size:12px}.group:not(.expanded) .group-body{display:none}.group-head:after{content:'⌄';color:#91a4c0;font-size:15px;margin-left:0}.group.expanded .group-head:after{content:'⌃'}.group-head .tag{margin-left:auto}.group-editor .subcontent small{display:none}.hierarchy-note{display:none}.group-editor .substep{padding:7px 0}.group-editor .subcontent input{padding:8px}.group-editor .duration input{padding:7px;width:48px}.group-head{min-height:49px}</style><style>section[hidden]{display:none!important}button,input{pointer-events:auto}.group-head{cursor:pointer;user-select:none}.group-head:focus-visible{outline:2px solid #86aaff;border-radius:12px}.substep{grid-template-columns:1fr auto}.preview-note{display:none}</style><style>
+/* Toss-inspired mobile-first visual refresh: independent interpretation, no proprietary assets */
+:root{font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;background:#f2f4f6;color:#191f28;color-scheme:light}
+body{padding:env(safe-area-inset-top) 0 calc(96px + env(safe-area-inset-bottom));background:#f2f4f6}
+main{max-width:520px;margin:auto;padding:0 20px}
+header{padding:36px 0 12px}header>small{color:#6b7684;font-size:12px;font-weight:700;letter-spacing:.7px}h1{font-size:28px;line-height:1.3;letter-spacing:-1px;margin:10px 0 6px;font-weight:800}h2{font-size:19px;letter-spacing:-.4px;margin:0 0 18px}
+.muted,small,.help{color:#8b95a1}.preview-label{font-size:12px;color:#8b95a1;letter-spacing:0;font-weight:700;margin:24px 0 8px}
+.card{background:#fff;border:0;border-radius:22px;padding:22px;margin:14px 0;box-shadow:none}
+.clock{font-size:clamp(64px,16vw,86px);font-weight:750;letter-spacing:-4px;margin:26px 0 22px;color:#191f28}
+.progress{height:7px;background:#e8f3ff}.bar{background:#3182f6}
+button{border:0;border-radius:13px;padding:12px 10px;min-height:48px;background:#f2f4f6;color:#4e5968;font-weight:700;transition:background .15s,transform .12s}
+button:active{transform:scale(.98);background:#e5e8eb}button.primary,nav button.active{background:#3182f6;color:#fff}button.primary:active,nav button.active:active{background:#1b64da}button:focus-visible,input:focus-visible,.group-head:focus-visible{outline:3px solid #90c2ff;outline-offset:2px}
+nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(100%,520px);z-index:5;margin:0;gap:8px;padding:12px 20px calc(12px + env(safe-area-inset-bottom));background:rgba(255,255,255,.96);border-top:1px solid #f2f4f6;backdrop-filter:blur(12px)}nav button{font-size:13px;min-height:48px;background:transparent;color:#8b95a1;border-radius:12px}nav button.active{background:#e8f3ff;color:#1b64da}
+.tag{background:#f2f4f6;color:#6b7684;font-size:12px;font-weight:650;padding:7px 10px}
+.group{border:0;border-radius:16px;margin:8px 0;background:#f9fafb;overflow:hidden}.group-head{background:transparent;padding:16px 14px;min-height:60px}.group-head b{font-size:16px;color:#333d4b}.group-head:after{color:#8b95a1}.group-body{padding:0 15px 8px}.substep{border-bottom:1px solid #e5e8eb;padding:12px 0}.subcontent b{font-size:14px;color:#4e5968;font-weight:550}.duration{font-size:13px;color:#8b95a1}
+.group-editor .subcontent input,.group-editor .duration input,.metric input,.step input[type=text],.step input[type=number]{background:#fff;border:1px solid #e5e8eb;color:#191f28;border-radius:10px}
+.metric{padding:11px 0;color:#4e5968;font-size:14px}.goal{color:#6b7684;font-size:14px}.goal input{accent-color:#3182f6}
+.stats{gap:8px}.statbox{background:#f9fafb;border-radius:15px;padding:18px 5px}.stat{font-size:24px;color:#191f28}.day{border-color:#e5e8eb;padding:15px 0}.day b{font-size:14px}.day .muted{font-size:13px;margin-top:5px}
+#stageTitle{font-size:15px;color:#333d4b}#coach{background:#f9fafb;padding:13px 14px;border-radius:12px;color:#6b7684}#saveMetrics{margin-top:18px!important}
+@media(max-width:420px){main{padding:0 16px}.card{padding:19px;border-radius:20px}.buttons{gap:7px}.buttons button{font-size:13px;padding:10px 4px}.group-head{padding:14px 12px}.stats{gap:6px}.stat{font-size:22px}}
+</style><style>
+:root{background:#101116!important;color:#f2f4f8!important;color-scheme:dark!important}
+body{background:#101116!important;color:#f2f4f8!important}
+header small,.preview-label{color:#83b4ff!important}h1,h2,.stat{color:#f2f4f8!important}
+.muted,small,.help,.duration,.day .muted{color:#949ba9!important}
+.card{background:#1b1d25!important;border:1px solid #292d38!important;box-shadow:none!important}
+.group,.statbox,#coach{background:#242730!important}
+.group-head b,.subcontent b,#stageTitle{color:#e8eaf0!important}
+.group-head:after{color:#9ba5b5!important}
+.substep,.day{border-color:#373b46!important}
+.tag{background:#303745!important;color:#b5c6e3!important}
+button{background:#30343f!important;color:#e9edf6!important}
+button.primary{background:#3182f6!important;color:white!important}
+button:active{filter:brightness(1.15)}
+nav{background:rgba(25,27,34,.96)!important;border-color:#343843!important}
+nav button{background:transparent!important;color:#969dab!important}
+nav button.active{background:#253c5c!important;color:#81b5ff!important}
+.group-editor input,.metric input,.step input{background:#171a21!important;border:1px solid #3d4350!important;color:#f2f4f8!important}
+.progress{background:#353d4b!important}.bar{background:#4d9aff!important}
+.clock{margin:20px 0 0!important;color:#fff!important}
+.motion-visual{position:relative;height:176px;margin:2px auto 14px;max-width:370px;display:grid;place-items:center;overflow:hidden;isolation:isolate}
+.motion-visual:before{content:'';position:absolute;width:170px;height:110px;border-radius:50%;background:#3182f6;filter:blur(65px);opacity:.18}
+.motion-visual svg{width:100%;height:100%;display:block}
+.motion-visual .halo{transform-origin:185px 88px;animation:haloBreath 5s ease-in-out infinite}
+.motion-visual .orbit{transform-origin:185px 88px;animation:orbitSpin 16s linear infinite}
+.motion-visual .orbit.reverse{animation-direction:reverse;animation-duration:21s}
+.motion-visual .core{transform-origin:185px 88px;animation:coreFloat 4.5s ease-in-out infinite}
+.motion-visual .glint{transform-origin:185px 88px;animation:glintPulse 3.5s ease-in-out infinite}
+@keyframes haloBreath{0%,100%{opacity:.48;transform:scale(.94)}50%{opacity:.8;transform:scale(1.06)}}
+@keyframes orbitSpin{to{transform:rotate(360deg)}}
+@keyframes coreFloat{0%,100%{transform:translateY(3px) scale(.97)}50%{transform:translateY(-4px) scale(1.03)}}
+@keyframes glintPulse{0%,100%{opacity:.4}50%{opacity:.95}}
+@media(prefers-reduced-motion:reduce){.motion-visual *{animation:none!important}}
+</style><style>
+/* Integrated motion language: Vocabulary / Reading / Writing / Speaking */
+.learning-visual{height:218px;max-width:390px;overflow:hidden;position:relative;isolation:isolate;perspective:900px}
+.learning-visual:before{display:none}
+.learning-visual .visual-panel{position:absolute;inset:0;display:none;place-items:center;perspective:900px;isolation:isolate}
+.learning-visual .visual-panel.active{display:grid}
+.learning-visual .ambient{position:absolute;width:220px;height:190px;background:radial-gradient(circle,#3182f628,transparent 70%);filter:blur(19px);z-index:-1}
+.learning-visual .paper,.learning-visual .sheet{position:absolute;width:140px;height:172px;border-radius:13px;background:#f7f9fc;box-shadow:0 18px 34px #0007,0 2px 5px #0002;overflow:hidden;backface-visibility:hidden}
+.learning-visual .sheet{transform-origin:50% 90%}
+.learning-visual .sheet.back{transform:translate(12px,8px) rotate(5deg);background:#cbd5e3}
+.learning-visual .sheet.mid{transform:translate(6px,4px) rotate(2.5deg);background:#e6ecf4}
+.learning-visual .sheet.front{display:grid;place-items:center;animation:ptPage 4.8s cubic-bezier(.45,0,.2,1) infinite}
+.learning-visual .sheet.front:before,.learning-visual .paper:before{content:'';position:absolute;inset:0;background:linear-gradient(125deg,#fff9,transparent 58%);pointer-events:none}
+.learning-visual .mark{position:absolute;top:22px;left:20px;width:28px;height:6px;background:#e4eaf2;border-radius:8px}
+.learning-visual .stroke{position:absolute;top:37px;left:20px;width:60px;height:5px;background:#eef1f6;border-radius:8px}
+.learning-visual .tick{width:74px;height:74px;filter:drop-shadow(0 7px 10px #3182f62b)}
+.learning-visual .tick path{fill:none;stroke:#3182f6;stroke-width:7;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:105;stroke-dashoffset:105;animation:ptDraw 4.8s ease-in-out infinite}
+@keyframes ptDraw{0%,16%{stroke-dashoffset:105}31%,75%{stroke-dashoffset:0}84%,100%{stroke-dashoffset:105}}
+@keyframes ptPage{0%,13%{transform:translateY(0);opacity:1}30%,68%{transform:translateY(-2px);opacity:1}83%{transform:translate(95px,-66px) rotate(23deg) rotateY(-50deg);opacity:0}84%{transform:translate(-17px,15px) rotate(-6deg);opacity:0}100%{transform:translateY(0);opacity:1}}
+.learning-visual .paper.back{background:#d9e3f0;transform:translate(10px,7px) rotate(5deg)}
+.learning-visual .paper.mid{background:#e8eef6;transform:translate(5px,3px) rotate(2deg)}
+.learning-visual .reading .paper.front{animation:ptReadturn 5s cubic-bezier(.45,0,.2,1) infinite}
+.learning-visual .read-lines{position:absolute;top:32px;left:19px;right:19px;display:grid;gap:11px}
+.learning-visual .read-lines i{display:block;height:7px;border-radius:6px;background:#e1e7f0;position:relative;overflow:hidden}
+.learning-visual .read-lines i:nth-child(2){width:83%}.learning-visual .read-lines i:nth-child(3){width:95%}.learning-visual .read-lines i:nth-child(4){width:62%}
+.learning-visual .read-lines i:after{content:'';position:absolute;inset:0;background:#3182f6;transform:translateX(-105%);animation:ptHighlight 5s ease-in-out infinite}
+.learning-visual .read-lines i:nth-child(2):after{animation-delay:.34s}.learning-visual .read-lines i:nth-child(3):after{animation-delay:.68s}.learning-visual .read-lines i:nth-child(4):after{animation-delay:1.02s}
+@keyframes ptHighlight{0%,12%{transform:translateX(-105%)}27%,57%{transform:translateX(0)}70%,100%{transform:translateX(105%)}}
+@keyframes ptReadturn{0%,65%{transform:translateY(0);opacity:1}82%{transform:translate(85px,-48px) rotate(19deg) rotateY(-52deg);opacity:0}83%{transform:translate(-15px,15px) rotate(-5deg);opacity:0}100%{transform:translateY(0);opacity:1}}
+.learning-visual .writing .paper.front{animation:ptWritingfloat 5s ease-in-out infinite}
+.learning-visual .pen-line{position:absolute;left:12px;top:40px;width:115px;height:90px;overflow:visible}
+.learning-visual .pen-line path{fill:none;stroke:#3182f6;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:280;stroke-dashoffset:280;animation:ptWrite 5s ease-in-out infinite}
+.learning-visual .pen-line path.second{stroke:#8dbbff;stroke-width:5;animation-delay:.45s}
+.learning-visual .writing .ghost{position:absolute;left:19px;top:20px;width:37px;height:7px;border-radius:7px;background:#e4eaf2}
+@keyframes ptWrite{0%,12%{stroke-dashoffset:280;opacity:1}55%,78%{stroke-dashoffset:0;opacity:1}93%,100%{stroke-dashoffset:0;opacity:0}}
+@keyframes ptWritingfloat{0%,68%{transform:rotate(-5deg) translateY(0)}80%{transform:rotate(-3deg) translateY(-6px)}100%{transform:rotate(-5deg) translateY(0)}}
+.learning-visual .speaking .sound{width:174px;height:174px;position:relative;display:grid;place-items:center}
+.learning-visual .speaking .core{width:48px;height:48px;border-radius:50%;background:linear-gradient(140deg,#91c4ff,#3182f6 55%,#1455ba);box-shadow:0 12px 28px #3182f63c,inset -5px -6px 12px #0848a666;animation:ptPulse 3.2s ease-in-out infinite}
+.learning-visual .speaking .wave{position:absolute;inset:0;border:4px solid #3182f6;border-radius:50%;opacity:0;animation:ptRipple 3.2s ease-out infinite}
+.learning-visual .speaking .wave.two{animation-delay:1.05s}.learning-visual .speaking .wave.three{animation-delay:2.1s}
+@keyframes ptRipple{0%{transform:scale(.25);opacity:0}15%{opacity:.65}80%,100%{transform:scale(1);opacity:0}}
+@keyframes ptPulse{0%,100%{transform:scale(.92)}50%{transform:scale(1.07)}}
+@media(prefers-reduced-motion:reduce){.learning-visual *,.learning-visual *:after{animation:none!important}.learning-visual .tick path{stroke-dashoffset:0}.learning-visual .pen-line path{stroke-dashoffset:0}}
+</style><style>
+/* Compact timer hierarchy */
+.timer-heading{justify-content:center!important;position:relative;min-height:28px;margin-bottom:2px}
+#stageTitle{font-size:17px!important;font-weight:750!important;letter-spacing:-.35px;text-align:center;color:#f2f4f8!important}
+#status{position:absolute;right:0;top:1px;font-size:10px!important;padding:5px 7px!important;opacity:.75}
+#coach{background:none!important;border:0!important;padding:0!important;margin:6px 0 0!important;text-align:center!important;color:#929bab!important;font-size:12px!important;font-weight:550!important;letter-spacing:.25px}
+.clock{font-size:clamp(88px,19vw,132px)!important;line-height:1.12!important;letter-spacing:-5px!important;margin:10px 0 4px!important;font-weight:780!important}
+@media(max-width:390px){#stageTitle{font-size:16px!important}#status{position:static;font-size:10px!important}.timer-heading{gap:7px}.clock{font-size:clamp(76px,20vw,100px)!important;letter-spacing:-4px!important}}
+/* Restored timer scale; left-aligned compact heading */
+.timer-heading{justify-content:flex-start!important;text-align:left!important}
+#stageTitle{text-align:left!important}
+#coach{text-align:left!important}
+.clock{font-size:clamp(64px,16vw,86px)!important;letter-spacing:-4px!important;margin:20px 0 0!important;line-height:normal!important}
+@media(max-width:390px){.clock{font-size:clamp(64px,16vw,86px)!important;letter-spacing:-4px!important}}
+</style><style id="tds-refinement">
+/* TDS-inspired refinement: independent static prototype */
+:root{--bg:#101116;--surface:#1b1d24;--surface-raised:#252831;--line:#30343e;--text:#f2f4f8;--sub:#a3aab8;--blue:#3182f6}
+body{background:var(--bg)!important;-webkit-font-smoothing:antialiased}
+main{max-width:520px!important;padding:0 18px!important}
+header{padding:28px 2px 10px!important}header h1{font-size:27px!important;letter-spacing:-.85px!important}
+.preview-label{margin:20px 2px 10px!important;color:#858e9d!important;font-size:11px!important;letter-spacing:.3px!important}
+.card{background:var(--surface)!important;border:1px solid #282b33!important;border-radius:22px!important;padding:21px!important;margin:12px 0!important}
+.card h2{font-size:19px!important;font-weight:750!important;letter-spacing:-.5px!important;margin-bottom:15px!important}
+.timer-heading{align-items:center!important;gap:12px!important}
+#stageTitle{font-size:17px!important;line-height:1.45!important;text-align:left!important;font-weight:720!important;letter-spacing:-.4px!important}
+#status{background:#2b303b!important;color:#c1c9d5!important;border:0!important;border-radius:999px!important;padding:5px 9px!important;font-size:11px!important;white-space:nowrap}
+#coach{background:none!important;text-align:left!important;color:#9da6b4!important;margin:5px 0 0!important;padding:0!important;font-size:12px!important;letter-spacing:0!important}
+.clock{font-size:clamp(64px,16vw,86px)!important;font-weight:750!important;line-height:1.12!important;letter-spacing:-1.5px!important;margin:24px 0 9px!important;color:#f8faff!important;font-variant-numeric:tabular-nums}
+.learning-visual{margin-top:0!important;margin-bottom:7px!important}
+.progress{height:6px!important;border-radius:999px!important;background:#333946!important}.bar{background:#4d9aff!important;border-radius:999px}
+button{min-height:48px!important;border:0!important;border-radius:13px!important;background:#30343f!important;color:#e5eaf3!important;font-weight:650!important}
+button.primary{background:#3182f6!important;color:#fff!important}button:active{transform:scale(.985)}
+button:focus-visible,input:focus-visible,.group-head:focus-visible{outline:2px solid #80b4ff!important;outline-offset:3px!important}
+.group{background:#252831!important;border:0!important;border-radius:15px!important;margin:8px 0!important}
+.group-head{min-height:58px!important;padding:15px 14px!important}.group-head b{font-size:15px!important;font-weight:690!important}.group-head .tag{font-size:11px!important;background:#333844!important;color:#b7bfcb!important}
+.group-body{padding:0 15px 8px!important}.substep{padding:12px 0!important;border-color:#373b45!important}.subcontent b{font-size:13px!important;font-weight:550!important}.duration{color:#a5adba!important}
+.statbox{background:#252831!important;border-radius:15px!important}.stat{font-size:24px!important;font-variant-numeric:tabular-nums}
+.metric{min-height:55px!important;gap:12px!important}.metric input{min-height:42px!important}
+nav{background:rgba(24,26,33,.97)!important;border-top:1px solid #30343e!important;gap:5px!important;padding:10px 18px calc(10px + env(safe-area-inset-bottom))!important}
+nav button{min-height:51px!important;border-radius:12px!important;font-size:13px!important}nav button.active{background:#263b59!important;color:#8bbcff!important}
+.help{color:#9ca4b2!important;line-height:1.65!important}
+@media(max-width:390px){main{padding:0 14px!important}.card{padding:17px!important}.clock{font-size:clamp(62px,17vw,80px)!important}.buttons{gap:6px!important}}
+@media(prefers-reduced-motion:reduce){.learning-visual *,button{animation:none!important;transition:none!important}}
+</style><style>
+#clock{font-variant-numeric:tabular-nums;letter-spacing:-1.5px!important}
+.edit-actions{display:flex;gap:5px;align-items:center;margin-left:5px}.edit-actions button{padding:5px 8px;min-height:32px;font-size:12px;border-radius:9px;background:#273244;color:#e5edff;border:0}.edit-actions button:disabled{opacity:.35}
+#editor .substep{gap:5px}#editor .subcontent{min-width:0}#editor input[type=text]{min-width:0;width:100%}#editor input[type=number]{width:48px}
+#notice{font-size:12px;color:#a5b4cc;margin:10px 0}#days .day{padding:14px 0}button{touch-action:manipulation}
+</style></head><body><main><header><small>DAILY ENGLISH PT</small><h1>오늘의 영어 훈련</h1><div class="muted">꾸준히 쌓아가는 나의 영어 루틴</div><nav><button class="active" data-tab="train">훈련</button><button data-tab="routine">루틴 편집</button><button data-tab="history">학습 기록</button></nav></header>
+<div class="preview-note">디자인 검토용 · 기본 화면은 대분류 중심, 선택한 그룹만 세부 단계 표시 (기능 비활성화)</div><section id="train"><div class="card"><div class="row timer-heading"><b id="stageTitle">Vocabulary · 양치기 1차 암기</b><span class="tag" id="status">준비</span></div><p class="help" id="coach" style="">01 / 05  ·  단어 50개</p><div class="clock" id="clock">08:00</div><div aria-label="현재 학습 영역별 모션 키비주얼" class="motion-visual learning-visual"><div aria-hidden="true" class="visual-panel vocabulary" data-visual="vocabulary"><div class="ambient"></div><div class="sheet back"></div><div class="sheet mid"></div><div class="sheet front" id="front"><div class="mark"></div><div class="stroke"></div><svg aria-label="체크 표시" class="tick" viewbox="0 0 100 100"><path d="M19 52 L41 72 L82 27"></path></svg></div></div><div aria-hidden="true" class="visual-panel reading" data-visual="reading"><div class="ambient"></div><div class="paper back"></div><div class="paper mid"></div><div class="paper front"><div class="read-lines"><i></i><i></i><i></i><i></i></div></div></div><div aria-hidden="true" class="visual-panel writing" data-visual="writing"><div class="ambient"></div><div class="paper back"></div><div class="paper front"><div class="ghost"></div><svg aria-label="추상적인 필기 모션" class="pen-line" viewbox="0 0 120 100"><path d="M8 25 Q22 10 30 28 T52 27 Q65 12 76 29 T111 25"></path><path class="second" d="M9 62 Q26 44 39 64 T70 60 Q85 45 109 61"></path></svg></div></div><div aria-hidden="true" class="visual-panel speaking" data-visual="speaking"><div class="ambient"></div><div class="sound"><div class="wave"></div><div class="wave two"></div><div class="wave three"></div><div class="core"></div></div></div></div><div class="progress"><div class="bar" id="bar" style="width:35%"></div></div><div class="row muted" style="margin-top:8px"><small id="elapsed">진행 00:00</small><small id="total">전체 48:00</small></div><div class="buttons"><button data-add="-30">−30초</button><button data-add="30">+30초</button><button data-add="60">+1분</button></div><div class="buttons"><button id="reset">초기화</button><button class="primary" id="play">시작</button><button id="next">다음</button></div><label class="goal"><input checked="" id="voice" type="checkbox"/> 음성 안내</label></div><div class="card"><h2>오늘의 훈련</h2><div id="trainSteps"><p class="hierarchy-note">대분류 → 세부 훈련 → 개별 시간 · 총 48분</p><div class="group expanded"><div aria-expanded="true" class="group-head" role="button" tabindex="0"><div><b>01 · Vocabulary</b><small>단어 양치기 · 암기와 재시험</small></div><span class="tag">5단계 · 20분</span></div><div class="group-body"><div class="substep"><span class="subnum">01</span><div class="subcontent"><b>양치기 1차 암기</b><small>단어 50개</small></div><span class="duration">8분</span></div><div class="substep"><span class="subnum">02</span><div class="subcontent"><b>1차 단어 시험</b><small>전체 단어 테스트</small></div><span class="duration">4분</span></div><div class="substep"><span class="subnum">03</span><div class="subcontent"><b>2차 암기</b><small>오답 중심 재암기</small></div><span class="duration">4분</span></div><div class="substep"><span class="subnum">04</span><div class="subcontent"><b>2차 단어 시험</b><small>오답 재시험</small></div><span class="duration">2분</span></div><div class="substep"><span class="subnum">05</span><div class="subcontent"><b>단어장 훑기</b><small>주요 단어 확인</small></div><span class="duration">2분</span></div></div></div><div class="group"><div aria-expanded="false" class="group-head" role="button" tabindex="0"><div><b>02 · Reading</b><small>독해 및 표현 정리</small></div><span class="tag">2단계 · 12분</span></div><div class="group-body"><div class="substep"><span class="subnum">01</span><div class="subcontent"><b>NYT 빠른 리딩</b><small>아티클 1개</small></div><span class="duration">8분</span></div><div class="substep"><span class="subnum">02</span><div class="subcontent"><b>표현 및 구조 정리</b><small>표현 2개</small></div><span class="duration">4분</span></div></div></div><div class="group"><div aria-expanded="false" class="group-head" role="button" tabindex="0"><div><b>03 · Writing</b><small>영작 훈련</small></div><span class="tag">1단계 · 6분</span></div><div class="group-body"><div class="substep"><span class="subnum">01</span><div class="subcontent"><b>GPT 영작 훈련</b><small>영작 3문장</small></div><span class="duration">6분</span></div></div></div><div class="group"><div aria-expanded="false" class="group-head" role="button" tabindex="0"><div><b>04 · Speaking</b><small>말하기 훈련</small></div><span class="tag">1단계 · 10분</span></div><div class="group-body"><div class="substep"><span class="subnum">01</span><div class="subcontent"><b>유튜브 쉐도잉</b><small>쉐도잉 30회</small></div><span class="duration">10분</span></div></div></div></div></div><div class="card"><h2>오늘의 학습량</h2><div id="metrics"><label class="metric">단어 (개)<input min="0" type="number" value="50"/></label><label class="metric">1차 시험 정답 (개)<input min="0" type="number" value="34"/></label><label class="metric">2차 시험 정답 (개)<input min="0" type="number" value="14"/></label><label class="metric">읽은 글 (개)<input min="0" type="number" value="1"/></label><label class="metric">표현 (개)<input min="0" type="number" value="2"/></label><label class="metric">영작 (문장)<input min="0" type="number" value="3"/></label><label class="metric">쉐도잉 (회)<input min="0" type="number" value="30"/></label></div><button class="primary" id="saveMetrics" style="width:100%;margin-top:12px">학습량 저장</button><p class="help">기록은 이 기기의 브라우저에 저장됩니다. 다른 기기에서는 JSON 백업을 복원하세요.</p></div></section>
+<section hidden="" id="routine"><div class="card"><h2>나만의 훈련 구성</h2><p class="help">단계 이름, 목표, 시간을 변경하거나 순서를 바꿀 수 있습니다. 변경 내용은 다음 시작 또는 초기화부터 적용됩니다.</p><div id="editor"><p class="hierarchy-note">대분류 → 세부 훈련 → 개별 시간 · 총 48분</p><div class="group group-editor expanded"><div aria-expanded="true" class="group-head" role="button" tabindex="0"><div><b>01 · Vocabulary</b><small>단어 양치기 · 암기와 재시험</small></div><span class="tag">5단계 · 20분</span></div><div class="group-body"><div class="substep"><span class="subnum">01</span><div class="subcontent"><input type="text" value="양치기 1차 암기"/><small>단어 50개</small></div><span class="duration"><input type="number" value="8"/> 분</span></div><div class="substep"><span class="subnum">02</span><div class="subcontent"><input type="text" value="1차 단어 시험"/><small>전체 단어 테스트</small></div><span class="duration"><input type="number" value="4"/> 분</span></div><div class="substep"><span class="subnum">03</span><div class="subcontent"><input type="text" value="2차 암기"/><small>오답 중심 재암기</small></div><span class="duration"><input type="number" value="4"/> 분</span></div><div class="substep"><span class="subnum">04</span><div class="subcontent"><input type="text" value="2차 단어 시험"/><small>오답 재시험</small></div><span class="duration"><input type="number" value="2"/> 분</span></div><div class="substep"><span class="subnum">05</span><div class="subcontent"><input type="text" value="단어장 훑기"/><small>주요 단어 확인</small></div><span class="duration"><input type="number" value="2"/> 분</span></div></div></div><div class="group group-editor"><div aria-expanded="false" class="group-head" role="button" tabindex="0"><div><b>02 · Reading</b><small>독해 및 표현 정리</small></div><span class="tag">2단계 · 12분</span></div><div class="group-body"><div class="substep"><span class="subnum">01</span><div class="subcontent"><input type="text" value="NYT 빠른 리딩"/><small>아티클 1개</small></div><span class="duration"><input type="number" value="8"/> 분</span></div><div class="substep"><span class="subnum">02</span><div class="subcontent"><input type="text" value="표현 및 구조 정리"/><small>표현 2개</small></div><span class="duration"><input type="number" value="4"/> 분</span></div></div></div><div class="group group-editor"><div aria-expanded="false" class="group-head" role="button" tabindex="0"><div><b>03 · Writing</b><small>영작 훈련</small></div><span class="tag">1단계 · 6분</span></div><div class="group-body"><div class="substep"><span class="subnum">01</span><div class="subcontent"><input type="text" value="GPT 영작 훈련"/><small>영작 3문장</small></div><span class="duration"><input type="number" value="6"/> 분</span></div></div></div><div class="group group-editor"><div aria-expanded="false" class="group-head" role="button" tabindex="0"><div><b>04 · Speaking</b><small>말하기 훈련</small></div><span class="tag">1단계 · 10분</span></div><div class="group-body"><div class="substep"><span class="subnum">01</span><div class="subcontent"><input type="text" value="유튜브 쉐도잉"/><small>쉐도잉 30회</small></div><span class="duration"><input type="number" value="10"/> 분</span></div></div></div></div><div class="buttons"><button id="addStep">+ 단계 추가</button><button id="restore">기본 루틴</button><button class="primary" id="apply">루틴 적용</button></div></div></section>
+<section hidden="" id="history"><div class="card"><h2>학습 현황</h2><div class="stats"><div class="statbox"><div class="stat" id="streak">3</div><small>연속 학습일</small></div><div class="statbox"><div class="stat" id="timeSum">120</div><small>누적 학습 분</small></div><div class="statbox"><div class="stat" id="daysSum">5</div><small>학습한 날짜</small></div></div><p class="help">연속 학습일은 오늘 또는 어제부터 역산하며, 1분 이상 타이머를 실행한 날을 학습일로 계산합니다.</p></div><div class="card"><div class="row"><h2>날짜별 기록</h2><button id="export">JSON 내보내기</button></div><div id="days"><div class="day"><b>2026-11-08</b><div class="muted">40분 · 단어 50개 · 영작 3문장</div></div><div class="day"><b>2026-11-07</b><div class="muted">40분 · 단어 45개 · 영작 3문장</div></div><div class="day"><b>2026-11-06</b><div class="muted">40분 · 단어 50개 · 영작 2문장</div></div></div></div><div class="card"><h2>데이터 관리</h2><input accept="application/json,.json" id="import" style="max-width:100%" type="file"/><p class="help">기록은 이 기기의 브라우저에 저장됩니다. 다른 기기에서는 JSON 백업을 복원하세요.</p></div></section>
+<p class="help">UI 검토용 프로토타입 · 타이머와 화면 전환은 시연용이며 학습 기록은 저장되지 않습니다.</p></main><script>(()=>{
+'use strict';
+const $=q=>document.querySelector(q), $$=q=>Array.from(document.querySelectorAll(q));
+const KEY='english-pt-v2-mobile';
+const GROUPS=['Vocabulary','Reading','Writing','Speaking'];
+const defaults=[
+ [{name:'양치기 1차 암기',goal:'단어 50개',min:8},{name:'1차 단어 시험',goal:'전체 단어 테스트',min:4},{name:'2차 암기',goal:'오답 중심 재암기',min:4},{name:'2차 단어 시험',goal:'오답 재시험',min:2},{name:'단어장 훑기',goal:'주요 단어 확인',min:2}],
+ [{name:'NYT 빠른 리딩',goal:'아티클 1개',min:8},{name:'표현 및 구조 정리',goal:'표현 2개',min:4}],
+ [{name:'GPT 영작 훈련',goal:'영작 3문장',min:6}],
+ [{name:'유튜브 쉐도잉',goal:'쉐도잉 30회',min:10}]
+];
+const clone=x=>JSON.parse(JSON.stringify(x));
+let state={groups:clone(defaults),history:{},index:0,remain:480,running:false,lastTick:null,finished:false,sessionSeconds:0,done:[]};
+try{const saved=JSON.parse(localStorage.getItem(KEY));if(saved&&Array.isArray(saved.groups)&&saved.history){state={...state,...saved};}}catch(e){}
+const steps=()=>state.groups.flatMap((g,gi)=>g.map((x,si)=>({...x,gi,si})));
+const fmt=n=>{n=Math.max(0,Math.ceil(n));return String(Math.floor(n/60)).padStart(2,'0')+':'+String(n%60).padStart(2,'0')};
+const today=()=>{const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){console.warn('저장 실패',e)}};
+function ensureDay(){let k=today();return state.history[k]||(state.history[k]={seconds:0,metrics:[0,0,0,0,0,0,0],completed:0});}
+function addTime(seconds){if(seconds<=0)return;ensureDay().seconds+=seconds;state.sessionSeconds+=seconds;}
+function tick(){if(!state.running)return;const now=Date.now();let delta=Math.max(0,Math.min((now-(state.lastTick||now))/1000,86400));state.lastTick=now;
+ while(delta>0&&state.running){const used=Math.min(delta,state.remain);state.remain-=used;addTime(used);delta-=used;if(state.remain<=.0001){finishStep();}}
+ save();paint();}
+function finishStep(){const all=steps();if(!all.length)return;const item=all[state.index];if(item){state.done.push({name:item.name,group:GROUPS[item.gi],at:new Date().toISOString()});ensureDay().completed++;}
+ if(state.index>=all.length-1){state.running=false;state.finished=true;state.remain=0;}else{state.index++;state.remain=all[state.index].min*60;}
+ if($('#voice').checked&&'speechSynthesis' in window){try{speechSynthesis.cancel();speechSynthesis.speak(new SpeechSynthesisUtterance(state.finished?'오늘의 훈련이 완료되었습니다.':'다음 훈련을 시작합니다.'));}catch(e){}}
+}
+function paint(){const all=steps();const st=all[Math.min(state.index,all.length-1)];if(!st)return;
+ $('#stageTitle').textContent=st.name;
+ const group=state.groups[st.gi];$('#coach').textContent=`${String(st.si+1).padStart(2,'0')} / ${String(group.length).padStart(2,'0')}${st.goal?'  ·  '+st.goal:''}`;
+ $('#clock').textContent=fmt(state.remain);$('#status').textContent=state.finished?'전체 완료':state.running?'진행 중':'준비 / 일시정지';$('#play').textContent=state.running?'일시정지':state.finished?'다시 시작':'시작';
+ $('#elapsed').textContent='현재 단계 '+fmt(Math.max(0,st.min*60-state.remain));$('#total').textContent='전체 '+fmt(all.reduce((n,x)=>n+x.min,0)*60);
+ const total=all.reduce((n,x)=>n+x.min*60,0);const done=all.slice(0,state.index).reduce((n,x)=>n+x.min*60,0);$('#bar').style.width=(state.finished?100:Math.min(100,(done+(st.min*60-state.remain))/total*100))+'%';
+ const visual=GROUPS[st.gi].toLowerCase();$$('.visual-panel').forEach(v=>{const on=v.dataset.visual===visual;v.classList.toggle('active',on);v.setAttribute('aria-hidden',String(!on));});
+ $$('.visual-panel').forEach(v=>v.style.animationPlayState=state.running?'running':'paused');
+}
+function updateGroups(){['trainSteps','editor'].forEach(id=>{const root=$('#'+id);const gs=$$('.group'+(id==='editor'?'.group-editor':''));const nodes=Array.from(root.querySelectorAll('.group'));nodes.forEach((node,gi)=>{const group=state.groups[gi];const body=node.querySelector('.group-body');const expanded=node.classList.contains('expanded');body.innerHTML='';node.querySelector('.tag').textContent=`${group.length}단계 · ${group.reduce((a,b)=>a+b.min,0)}분`;
+ group.forEach((step,si)=>{const row=document.createElement('div');row.className='substep';const num=document.createElement('span');num.className='subnum';num.textContent=String(si+1).padStart(2,'0');row.append(num);const content=document.createElement('div');content.className='subcontent';if(id==='editor'){const name=document.createElement('input');name.type='text';name.value=step.name;name.dataset.gi=gi;name.dataset.si=si;content.append(name);}else{const b=document.createElement('b');b.textContent=step.name;content.append(b);}const small=document.createElement('small');small.textContent=step.goal;content.append(small);row.append(content);
+ const duration=document.createElement('span');duration.className='duration';if(id==='editor'){const inp=document.createElement('input');inp.type='number';inp.min=1;inp.max=240;inp.value=step.min;inp.dataset.gi=gi;inp.dataset.si=si;duration.append(inp);duration.append(' 분');}else{duration.textContent=step.min+'분';}row.append(duration);
+ if(id==='editor'){const actions=document.createElement('span');actions.className='edit-actions';[['↑','up'],['↓','down'],['×','delete']].forEach(([label,action])=>{const b=document.createElement('button');b.type='button';b.textContent=label;b.dataset.action=action;b.dataset.gi=gi;b.dataset.si=si;b.setAttribute('aria-label',action==='delete'?'단계 삭제':action==='up'?'위로 이동':'아래로 이동');actions.append(b);});row.append(actions);}body.append(row);});node.classList.toggle('expanded',expanded);});});}
+function metricsLoad(){const values=ensureDay().metrics;$$('#train input[type=number]').forEach((e,i)=>{if(i<7)e.value=values[i]||0});}
+function renderHistory(){const entries=Object.entries(state.history).filter(([k,v])=>v.seconds>=60||v.metrics.some(n=>n>0)).sort((a,b)=>b[0].localeCompare(a[0]));let total=entries.reduce((a,[k,v])=>a+v.seconds,0);$('#timeSum').textContent=Math.floor(total/60);$('#daysSum').textContent=entries.filter(([k,v])=>v.seconds>=60).length;
+ const days=new Set(entries.filter(([k,v])=>v.seconds>=60).map(([k])=>k));let d=new Date();if(!days.has(today()))d.setDate(d.getDate()-1);let streak=0;while(days.has(`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`)){streak++;d.setDate(d.getDate()-1)}$('#streak').textContent=streak;
+ const root=$('#days');root.innerHTML='';if(!entries.length){root.textContent='아직 학습 기록이 없습니다.';return;}entries.forEach(([date,v])=>{const el=document.createElement('div');el.className='day';const b=document.createElement('b');b.textContent=date;const info=document.createElement('div');info.className='muted';info.textContent=`${Math.floor(v.seconds/60)}분 · 단어 ${v.metrics[0]||0}개 · 영작 ${v.metrics[5]||0}문장 · 완료 ${v.completed||0}단계`;el.append(b,info);root.append(el)});}
+function reset(){state.running=false;state.lastTick=null;state.finished=false;state.index=0;state.remain=(steps()[0]?.min||1)*60;state.sessionSeconds=0;state.done=[];save();paint();}
+// Existing visual and tab structure
+$$('nav [data-tab]').forEach(b=>b.addEventListener('click',()=>{$$('nav [data-tab]').forEach(x=>x.classList.toggle('active',x===b));$$('main section').forEach(x=>x.hidden=x.id!==b.dataset.tab);if(b.dataset.tab==='history')renderHistory()}));
+$$('.group-head').forEach(h=>{const toggle=()=>{const g=h.closest('.group');g.classList.toggle('expanded');h.setAttribute('aria-expanded',String(g.classList.contains('expanded')))};h.addEventListener('click',toggle);h.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggle()}})});
+$('#play').addEventListener('click',()=>{if(state.finished)reset();state.running=!state.running;state.lastTick=state.running?Date.now():null;save();paint()});
+$('#reset').addEventListener('click',()=>{if(confirm('타이머를 처음부터 다시 시작할까요? 오늘 누적 학습 시간은 유지됩니다.'))reset()});
+$('#next').addEventListener('click',()=>{tick();if(!state.finished){finishStep();save();paint()}});
+$$('[data-add]').forEach(b=>b.addEventListener('click',()=>{tick();state.remain=Math.max(1,state.remain+Number(b.dataset.add));save();paint()}));
+$('#saveMetrics').addEventListener('click',()=>{ensureDay().metrics=$$('#train input[type=number]').slice(0,7).map(e=>Math.max(0,Number(e.value)||0));save();const b=$('#saveMetrics');b.textContent='저장 완료 ✓';setTimeout(()=>b.textContent='학습량 저장',1200)});
+function readEditor(){state.groups.forEach((g,gi)=>g.forEach((x,si)=>{const n=$(`#editor input[type=text][data-gi="${gi}"][data-si="${si}"]`),m=$(`#editor input[type=number][data-gi="${gi}"][data-si="${si}"]`);if(n)x.name=n.value.trim()||x.name;if(m)x.min=Math.max(1,Math.min(240,Math.round(Number(m.value)||1)))}));}
+$('#editor').addEventListener('click',e=>{const b=e.target.closest('button[data-action]');if(!b)return;readEditor();const gi=Number(b.dataset.gi),si=Number(b.dataset.si),a=state.groups[gi];if(b.dataset.action==='delete'){if(steps().length<=1){alert('최소 1개 훈련은 필요합니다.');return}a.splice(si,1);}else{const j=si+(b.dataset.action==='up'?-1:1);if(j<0||j>=a.length)return;[a[si],a[j]]=[a[j],a[si]];}updateGroups();});
+$('#addStep').addEventListener('click',()=>{readEditor();const gi=3;state.groups[gi].push({name:'새 훈련',goal:'직접 설정',min:5});updateGroups();const g=$$('#editor .group')[gi];g.classList.add('expanded');g.querySelector('.group-head').setAttribute('aria-expanded','true')});
+$('#restore').addEventListener('click',()=>{if(confirm('루틴 편집 내용을 기본값으로 되돌릴까요?')){state.groups=clone(defaults);updateGroups()}});
+$('#apply').addEventListener('click',()=>{readEditor();state.groups.forEach(g=>g.forEach(x=>x.min=Math.max(1,Math.min(240,x.min))));updateGroups();reset();alert('루틴을 저장했습니다. 다음 훈련부터 적용됩니다.')});
+$('#export').addEventListener('click',()=>{tick();const blob=new Blob([JSON.stringify({version:2,exportedAt:new Date().toISOString(),data:state},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='english-pt-backup-'+today()+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),3000)});
+$('#import').addEventListener('change',async e=>{const f=e.target.files[0];if(!f)return;try{const obj=JSON.parse(await f.text());const data=obj.data||obj;if(!Array.isArray(data.groups)||!data.history)throw Error('파일 형식이 맞지 않습니다.');if(!confirm('현재 기록과 루틴을 백업 파일로 교체할까요?'))return;state={...state,...data,running:false,lastTick:null};save();updateGroups();metricsLoad();paint();renderHistory();alert('복원 완료');}catch(err){alert('복원 실패: '+err.message)}finally{e.target.value=''}});
+window.addEventListener('pagehide',()=>{tick();save()});document.addEventListener('visibilitychange',()=>{if(!document.hidden){tick();metricsLoad()}});
+// initialize and recover elapsed time when reopened
+updateGroups();metricsLoad();if(state.running)tick();else paint();renderHistory();setInterval(tick,250);
+})();</script></body></html>
