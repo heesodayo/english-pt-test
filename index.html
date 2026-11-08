@@ -9,6 +9,8 @@
 .learning-visual.visual-paused *,
 .learning-visual.visual-paused *::before,
 .learning-visual.visual-paused *::after { animation-play-state: paused !important; }
+.group-editor .visual-choice{display:flex;align-items:center;gap:9px;margin-top:9px;font-size:12px;color:#9ba8ba;font-weight:500;flex-wrap:wrap}
+.group-editor .visual-select{min-width:150px;max-width:210px;background:#242a35;color:#f2f4f8;border:1px solid #394252;border-radius:9px;padding:8px 10px;font-size:13px}
 </style><style>.group-editor .section-name{width:100%;min-width:0;padding:7px 9px;border-radius:9px;background:#171a21;color:#f2f4f8;border:1px solid #3d4350;font-weight:650;font-size:14px}.group-editor .group-head>div{flex:1;min-width:0}.group-editor .goal-input{margin-top:5px;font-size:12px!important;opacity:.8}.section-footer{display:flex;flex-wrap:wrap;gap:6px;padding:12px 0}.section-footer button{font-size:12px;min-height:36px;padding:7px 9px}.section-footer .delete-section{color:#ffb5b5}.group-editor .substep{flex-wrap:wrap}.group-editor .edit-actions{margin-left:auto}.group-editor .subcontent{min-width:125px}</style><style>section[hidden]{display:none!important}button,input{pointer-events:auto}.group-head{cursor:pointer;user-select:none}.group-head:focus-visible{outline:2px solid #86aaff;border-radius:12px}.substep{grid-template-columns:1fr auto}.preview-note{display:none}</style><style>
 /* Toss-inspired mobile-first visual refresh: independent interpretation, no proprietary assets */
 :root{font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;background:#f2f4f6;color:#191f28;color-scheme:light}
@@ -250,6 +252,8 @@ nav button{min-height:51px!important;border-radius:12px!important;font-size:13px
 const $=q=>document.querySelector(q), $$=q=>Array.from(document.querySelectorAll(q));
 const KEY='english-pt-v2-mobile';
 const GROUPS=['Vocabulary','Reading','Writing','Speaking'];
+const DEFAULT_VISUALS=['vocabulary','reading','writing','speaking'];
+const VISUAL_CHOICES=[['vocabulary','⌨ 타이핑'],['reading','▤ 페이지'],['speaking','◉ 사운드 웨이브']];
 const defaults=[
  [{name:'양치기 1차 암기',goal:'단어 50개',min:8},{name:'1차 단어 시험',goal:'전체 단어 테스트',min:4},{name:'2차 암기',goal:'오답 중심 재암기',min:4},{name:'2차 단어 시험',goal:'오답 재시험',min:2},{name:'단어장 훑기',goal:'주요 단어 확인',min:2}],
  [{name:'NYT 빠른 리딩',goal:'아티클 1개',min:8},{name:'표현 및 구조 정리',goal:'표현 2개',min:4}],
@@ -263,12 +267,12 @@ function prepForStep(index){const all=steps();const cfg=state.prepSettings||{};c
 function validPrep(value,fallback){const n=Number(value);return Number.isFinite(n)&&n>=1?Math.min(86400,Math.round(n)):fallback;}
 function syncPrepEditor(){const a=$("#groupPrepInput"),b=$("#substepPrepInput");if(a)a.value=validPrep(state.prepSettings?.group,PREP_SECONDS);if(b)b.value=validPrep(state.prepSettings?.substep,SUBSTEP_PREP_SECONDS);}
 function readPrepEditor(){state.prepSettings={group:validPrep($("#groupPrepInput").value,PREP_SECONDS),substep:validPrep($("#substepPrepInput").value,SUBSTEP_PREP_SECONDS)};syncPrepEditor();}
-function setPreparation(index){const seconds=prepForStep(index);state.phase="prep";state.prepRemain=seconds;state.prepTotal=seconds;state.reminders=[];}
+function setPreparation(index){lastPrepCue=null;const seconds=prepForStep(index);state.phase="prep";state.prepRemain=seconds;state.prepTotal=seconds;state.reminders=[];}
 const reminderThresholds=[180,60,10];
-let state={groups:clone(defaults),prepSettings:{group:30,substep:10},groupNames:clone(GROUPS),history:{},index:0,remain:480,running:false,lastTick:null,finished:false,sessionSeconds:0,done:[],phase:"prep",prepRemain:PREP_SECONDS,prepTotal:PREP_SECONDS,reminders:[]};
+let state={groups:clone(defaults),prepSettings:{group:30,substep:10},groupNames:clone(GROUPS),groupVisuals:clone(DEFAULT_VISUALS),history:{},index:0,remain:480,running:false,lastTick:null,finished:false,sessionSeconds:0,done:[],phase:"prep",prepRemain:PREP_SECONDS,prepTotal:PREP_SECONDS,reminders:[]};
 try{const saved=JSON.parse(localStorage.getItem(KEY));if(saved&&Array.isArray(saved.groups)&&saved.history){state={...state,...saved};}}catch(e){}
 if(!state.prepSettings||typeof state.prepSettings!=="object")state.prepSettings={group:PREP_SECONDS,substep:SUBSTEP_PREP_SECONDS};
-if(!Array.isArray(state.done))state.done=[];if(!state.phase)state.phase="prep";if(!Number.isFinite(state.prepRemain)||state.prepRemain===10)state.prepRemain=PREP_SECONDS;if(!Array.isArray(state.reminders))state.reminders=[];if(!Number.isFinite(state.prepTotal)||state.prepTotal<=0)state.prepTotal=PREP_SECONDS;if(!Array.isArray(state.groups)||!state.groups.length||state.groups.some(g=>!Array.isArray(g)))state.groups=clone(defaults);if(!Array.isArray(state.groupNames))state.groupNames=clone(GROUPS);while(state.groupNames.length<state.groups.length)state.groupNames.push('새 섹션 '+(state.groupNames.length+1));state.groupNames=state.groupNames.slice(0,state.groups.length);state.groups.forEach(g=>{if(!g.length)g.push({name:'새 훈련',goal:'직접 설정',min:5})});
+if(!Array.isArray(state.done))state.done=[];if(!state.phase)state.phase="prep";if(!Number.isFinite(state.prepRemain)||state.prepRemain===10)state.prepRemain=PREP_SECONDS;if(!Array.isArray(state.reminders))state.reminders=[];if(!Number.isFinite(state.prepTotal)||state.prepTotal<=0)state.prepTotal=PREP_SECONDS;if(!Array.isArray(state.groups)||!state.groups.length||state.groups.some(g=>!Array.isArray(g)))state.groups=clone(defaults);if(!Array.isArray(state.groupNames))state.groupNames=clone(GROUPS);while(state.groupNames.length<state.groups.length)state.groupNames.push('새 섹션 '+(state.groupNames.length+1));state.groupNames=state.groupNames.slice(0,state.groups.length);if(!Array.isArray(state.groupVisuals))state.groupVisuals=clone(DEFAULT_VISUALS);while(state.groupVisuals.length<state.groups.length)state.groupVisuals.push('vocabulary');state.groupVisuals=state.groupVisuals.slice(0,state.groups.length);state.groups.forEach(g=>{if(!g.length)g.push({name:'새 훈련',goal:'직접 설정',min:5})});
 const steps=()=>state.groups.flatMap((g,gi)=>g.map((x,si)=>({...x,gi,si})));
 const fmt=n=>{n=Math.max(0,Math.ceil(n));return String(Math.floor(n/60)).padStart(2,'0')+':'+String(n%60).padStart(2,'0')};
 const today=()=>{const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
@@ -276,11 +280,17 @@ const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){co
 function ensureDay(){let k=today();return state.history[k]||(state.history[k]={seconds:0,metrics:[0,0,0,0,0,0,0],completed:0});}
 function addTime(seconds){if(seconds<=0)return;ensureDay().seconds+=seconds;state.sessionSeconds+=seconds;}
 let pendingReminder=null;
+// Short synthesized countdown tones; no external audio files required.
+let cueAudio=null;
+let lastPrepCue=null;
+function unlockCueAudio(){try{const C=window.AudioContext||window.webkitAudioContext;if(!C)return;if(!cueAudio)cueAudio=new C();if(cueAudio.state==='suspended')cueAudio.resume().catch(()=>{});}catch(e){}}
+function cueTone(final=false){if(!cueAudio||cueAudio.state!=='running')return;try{const t=cueAudio.currentTime,o=cueAudio.createOscillator(),g=cueAudio.createGain();o.type='sine';o.frequency.setValueAtTime(final?880:660,t);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.15,t+.012);g.gain.exponentialRampToValueAtTime(.0001,t+(final?.3:.12));o.connect(g);g.connect(cueAudio.destination);o.start(t);o.stop(t+(final?.31:.13));}catch(e){}}
+function prepCue(before,after){if(!state.running||state.phase!=='prep')return;for(let n=3;n>=1;n--){if(before>n&&after<=n&&lastPrepCue!==n){lastPrepCue=n;cueTone(false);$('#voiceCaption').textContent=n+'초 후 시작';}}}
 function tick(){if(!state.running)return;const now=Date.now();let delta=Math.max(0,Math.min((now-(state.lastTick||now))/1000,86400));state.lastTick=now;
  while(delta>0&&state.running){
   if(state.phase==='prep'){
-   const used=Math.min(delta,state.prepRemain);state.prepRemain-=used;delta-=used;
-   if(state.prepRemain<=.0001){state.phase='work';state.prepRemain=0;state.reminders=[];announce(`${steps()[state.index].name} 훈련을 시작합니다.`)}
+   const beforePrep=state.prepRemain;const used=Math.min(delta,state.prepRemain);state.prepRemain-=used;delta-=used;prepCue(beforePrep,state.prepRemain);
+   if(state.prepRemain<=.0001){state.phase='work';state.prepRemain=0;state.reminders=[];lastPrepCue=null;cueTone(true);announce(`${steps()[state.index].name} 훈련을 시작합니다.`)}
   }else{
    const before=state.remain,used=Math.min(delta,state.remain);state.remain-=used;addTime(used);delta-=used;
    for(const threshold of reminderThresholds){if(before>threshold&&state.remain<=threshold&&!state.reminders.includes(threshold)){
@@ -322,7 +332,7 @@ function paint(){const all=steps();const st=all[Math.min(state.index,all.length-
  $('#elapsed').textContent='현재 단계 '+fmt(Math.max(0,st.min*60-state.remain));$('#total').textContent='전체 '+fmt(all.reduce((n,x)=>n+x.min,0)*60);
  const total=all.reduce((n,x)=>n+x.min*60,0);const done=all.slice(0,state.index).reduce((n,x)=>n+x.min*60,0);$('#bar').style.width=(state.finished?100:Math.min(100,(done+(st.min*60-state.remain))/total*100))+'%';
  const prepRing=$('#prepProgressRing');if(prepRing){const circumference=2*Math.PI*70;const fraction=Math.max(0,Math.min(1,state.prepRemain/Math.max(1,state.prepTotal)));prepRing.style.strokeDasharray=String(circumference);prepRing.style.strokeDashoffset=String(circumference*(1-fraction));}
- const visual=state.phase==='prep'&&!state.finished?'prep':(GROUPS.includes(state.groupNames[st.gi])?state.groupNames[st.gi]:'writing').toLowerCase();$$('.visual-panel').forEach(v=>{const on=v.dataset.visual===visual;v.classList.toggle('active',on);v.setAttribute('aria-hidden',String(!on));});
+ const visual=state.phase==='prep'&&!state.finished?'prep':(state.groupVisuals?.[st.gi]||DEFAULT_VISUALS[st.gi]||'vocabulary');$$('.visual-panel').forEach(v=>{const on=v.dataset.visual===visual;v.classList.toggle('active',on);v.setAttribute('aria-hidden',String(!on));});
  document.querySelector('.learning-visual')?.classList.toggle('visual-paused',!state.running);
 }
 function updateGroups(){
@@ -335,6 +345,11 @@ function updateGroups(){
    const title=document.createElement('div');
    if(id==='editor'){
     const name=document.createElement('input');name.type='text';name.className='section-name';name.value=state.groupNames[gi];name.dataset.gi=gi;name.setAttribute('aria-label','섹션 이름');title.append(name);
+    const visualWrap=document.createElement('label');visualWrap.className='visual-choice';visualWrap.textContent='키비주얼';
+    const visualSelect=document.createElement('select');visualSelect.className='visual-select';visualSelect.dataset.visualGi=gi;visualSelect.setAttribute('aria-label','섹션 키비주얼 선택');
+    const options=VISUAL_CHOICES.slice();if(state.groupVisuals[gi]==='writing')options.push(['writing','✎ 필기']);
+    options.forEach(([value,label])=>{const option=document.createElement('option');option.value=value;option.textContent=label;visualSelect.append(option)});
+    visualSelect.value=state.groupVisuals[gi]||'vocabulary';visualWrap.append(visualSelect);title.append(visualWrap);
    }else{const label=document.createElement('b');label.textContent=String(gi+1).padStart(2,'0')+' · '+state.groupNames[gi];title.append(label)}
    const tag=document.createElement('span');tag.className='tag';tag.textContent=group.length+'단계 · '+group.reduce((a,b)=>a+(Number(b.min)||0),0)+'분';head.append(title,tag);node.append(head);
    const body=document.createElement('div');body.className='group-body';
@@ -452,10 +467,10 @@ $$('nav [data-tab]').forEach(b=>b.addEventListener('click',()=>{$$('nav [data-ta
  $('#'+id).addEventListener('click',e=>{const h=e.target.closest('.group-head');if(!h||e.target.closest('input,button'))return;const g=h.closest('.group');g.classList.toggle('expanded');h.setAttribute('aria-expanded',String(g.classList.contains('expanded')))});
  $('#'+id).addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.classList.contains('group-head')){e.preventDefault();e.target.click()}});
 });
-$('#play').addEventListener('click',()=>{unlockVoice();if(state.finished)reset();else tick();state.running=!state.running;state.lastTick=state.running?Date.now():null;if(state.running&&state.phase==='prep')announce(`${steps()[state.index].name} 훈련 준비 시간입니다. ${state.prepRemain}초 후 시작합니다.`);save();paint()});
+$('#play').addEventListener('click',()=>{unlockVoice();unlockCueAudio();if(state.finished)reset();else tick();state.running=!state.running;state.lastTick=state.running?Date.now():null;if(state.running&&state.phase==='prep')announce(`${steps()[state.index].name} 훈련 준비 시간입니다. ${state.prepRemain}초 후 시작합니다.`);save();paint()});
 $('#voice').addEventListener('change',()=>{if($('#voice').checked){unlockVoice();announce('음성 안내가 켜졌습니다.');}});
 $('#reset').addEventListener('click',()=>{tick();state.running=false;state.lastTick=null;state.finished=false;state.remain=steps()[state.index].min*60;setPreparation(state.index);/* 초기화 음성 안내 없음 */save();paint()});
-$('#next').addEventListener('click',()=>{unlockVoice();tick();if(state.finished)return;if(state.phase==='prep'){state.phase='work';state.prepRemain=0;state.reminders=[];announce(`${steps()[state.index].name} 훈련을 시작합니다.`);}else{finishStep();}state.lastTick=state.running?Date.now():null;save();paint()});$('#prev').addEventListener('click',()=>{tick();if(state.index<=0)return;state.index--;state.remain=steps()[state.index].min*60;setPreparation(state.index);state.finished=false;state.running=false;state.lastTick=null;const removed=state.done.pop();if(removed){const day=removed.at?.slice(0,10);if(day&&state.history[day])state.history[day].completed=Math.max(0,(state.history[day].completed||0)-1)}announce(`${steps()[state.index].name} 이전 단계로 이동했습니다.`);syncAccordion();save();paint()});
+$('#next').addEventListener('click',()=>{unlockVoice();unlockCueAudio();tick();if(state.finished)return;if(state.phase==='prep'){state.phase='work';state.prepRemain=0;state.reminders=[];announce(`${steps()[state.index].name} 훈련을 시작합니다.`);}else{finishStep();}state.lastTick=state.running?Date.now():null;save();paint()});$('#prev').addEventListener('click',()=>{tick();if(state.index<=0)return;state.index--;state.remain=steps()[state.index].min*60;setPreparation(state.index);state.finished=false;state.running=false;state.lastTick=null;const removed=state.done.pop();if(removed){const day=removed.at?.slice(0,10);if(day&&state.history[day])state.history[day].completed=Math.max(0,(state.history[day].completed||0)-1)}announce(`${steps()[state.index].name} 이전 단계로 이동했습니다.`);syncAccordion();save();paint()});
 function adjustCurrentTimer(delta){if(!Number.isFinite(delta))return;if(state.phase==='prep'&&!state.finished){state.prepRemain=Math.max(0,state.prepRemain+delta);state.prepTotal=Math.max(1,state.prepRemain,state.prepTotal+delta);if(state.prepRemain===0){state.phase='work';state.reminders=[];}}else{state.remain=Math.max(0,state.remain+delta);if(state.remain>0)state.finished=false;}state.lastTick=state.running?Date.now():null;}
 
 $$('[data-add]').forEach(b=>b.addEventListener('click',()=>{tick();adjustCurrentTimer(Number(b.dataset.add));save();paint()}));
@@ -474,23 +489,23 @@ $('#clearTodayTrain').addEventListener('click',clearTodayRecord);
 $('#clearTodayHistory').addEventListener('click',clearTodayRecord);
 $('#saveMetrics').addEventListener('click',()=>{ensureDay().metrics=$$('#train input[type=number]').slice(0,7).map(e=>Math.max(0,Number(e.value)||0));save();const b=$('#saveMetrics');b.textContent='저장 완료 ✓';setTimeout(()=>b.textContent='학습량 저장',1200)});
 function readEditor(){state.groups.forEach((g,gi)=>{
- const section=$(`#editor .section-name[data-gi="${gi}"]`);if(section)state.groupNames[gi]=section.value.trim()||state.groupNames[gi];
+ const section=$(`#editor .section-name[data-gi="${gi}"]`);if(section)state.groupNames[gi]=section.value.trim()||state.groupNames[gi];const visual=$(`#editor .visual-select[data-visual-gi="${gi}"]`);if(visual)state.groupVisuals[gi]=visual.value;
  g.forEach((x,si)=>{const n=$(`#editor input[type=text]:not(.goal-input)[data-gi="${gi}"][data-si="${si}"]`),m=$(`#editor input[type=number][data-gi="${gi}"][data-si="${si}"]`),goal=$(`#editor .goal-input[data-gi="${gi}"][data-si="${si}"]`);if(n)x.name=n.value.trim()||x.name;if(m)x.min=Math.max(1,Math.round(Number(m.value)||1));if(goal)x.goal=goal.value.trim()})
  });}
 $('#editor').addEventListener('click',e=>{
  const b=e.target.closest('button[data-action]');if(!b)return;readEditor();const gi=Number(b.dataset.gi),si=Number(b.dataset.si),a=state.groups[gi],action=b.dataset.action;
  if(action==='add-stage')a.push({name:'새 훈련',goal:'직접 설정',min:5});
- else if(action==='delete-section'){if(state.groups.length<=1){alert('최소 1개 섹션은 필요합니다.');return}if(!confirm('이 섹션과 모든 하위 단계를 삭제할까요?'))return;state.groups.splice(gi,1);state.groupNames.splice(gi,1)}
- else if(action==='section-up'||action==='section-down'){const j=gi+(action==='section-up'?-1:1);if(j<0||j>=state.groups.length)return;[state.groups[gi],state.groups[j]]=[state.groups[j],state.groups[gi]];[state.groupNames[gi],state.groupNames[j]]=[state.groupNames[j],state.groupNames[gi]]}
+ else if(action==='delete-section'){if(state.groups.length<=1){alert('최소 1개 섹션은 필요합니다.');return}if(!confirm('이 섹션과 모든 하위 단계를 삭제할까요?'))return;state.groups.splice(gi,1);state.groupNames.splice(gi,1);state.groupVisuals.splice(gi,1)}
+ else if(action==='section-up'||action==='section-down'){const j=gi+(action==='section-up'?-1:1);if(j<0||j>=state.groups.length)return;[state.groups[gi],state.groups[j]]=[state.groups[j],state.groups[gi]];[state.groupNames[gi],state.groupNames[j]]=[state.groupNames[j],state.groupNames[gi]];[state.groupVisuals[gi],state.groupVisuals[j]]=[state.groupVisuals[j],state.groupVisuals[gi]]}
  else if(action==='delete'){if(steps().length<=1){alert('최소 1개 훈련은 필요합니다.');return}if(a.length===1){alert('섹션마다 최소 1개 단계가 필요합니다. 섹션을 삭제하려면 섹션 삭제 버튼을 사용하세요.');return}a.splice(si,1)}
  else{const j=si+(action==='up'?-1:1);if(j<0||j>=a.length)return;[a[si],a[j]]=[a[j],a[si]]}
  updateGroups();const focusGi=Math.min(gi,state.groups.length-1);$$('#editor .group').forEach((g,i)=>{const open=i===focusGi;g.classList.toggle('expanded',open);g.querySelector('.group-head')?.setAttribute('aria-expanded',String(open))})
 });
-$('#addSection').addEventListener('click',()=>{readEditor();state.groups.push([{name:'새 훈련',goal:'직접 설정',min:5}]);state.groupNames.push('새 섹션');updateGroups();const all=$$('#editor .group');all.forEach((g,i)=>{const open=i===all.length-1;g.classList.toggle('expanded',open);g.querySelector('.group-head')?.setAttribute('aria-expanded',String(open))});all.at(-1)?.querySelector('.section-name')?.focus()});
-$('#restore').addEventListener('click',()=>{if(confirm('루틴 편집 내용을 기본값으로 되돌릴까요?')){state.groups=clone(defaults);state.groupNames=clone(GROUPS);state.prepSettings={group:PREP_SECONDS,substep:SUBSTEP_PREP_SECONDS};syncPrepEditor();updateGroups()}});
+$('#addSection').addEventListener('click',()=>{readEditor();state.groups.push([{name:'새 훈련',goal:'직접 설정',min:5}]);state.groupNames.push('새 섹션');state.groupVisuals.push('vocabulary');updateGroups();const all=$$('#editor .group');all.forEach((g,i)=>{const open=i===all.length-1;g.classList.toggle('expanded',open);g.querySelector('.group-head')?.setAttribute('aria-expanded',String(open))});all.at(-1)?.querySelector('.section-name')?.focus()});
+$('#restore').addEventListener('click',()=>{if(confirm('루틴 편집 내용을 기본값으로 되돌릴까요?')){state.groups=clone(defaults);state.groupNames=clone(GROUPS);state.groupVisuals=clone(DEFAULT_VISUALS);state.prepSettings={group:PREP_SECONDS,substep:SUBSTEP_PREP_SECONDS};syncPrepEditor();updateGroups()}});
 $('#apply').addEventListener('click',()=>{readPrepEditor();readEditor();state.groups.forEach(g=>g.forEach(x=>x.min=Math.max(1,x.min)));updateGroups();reset();alert('루틴을 저장했습니다. 다음 훈련부터 적용됩니다.')});
 $('#export').addEventListener('click',()=>{tick();const blob=new Blob([JSON.stringify({version:2,exportedAt:new Date().toISOString(),data:state},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='english-pt-backup-'+today()+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),3000)});
-$('#import').addEventListener('change',async e=>{const f=e.target.files[0];if(!f)return;try{const obj=JSON.parse(await f.text());const data=obj.data||obj;if(!Array.isArray(data.groups)||!data.groups.length||!data.history)throw Error('파일 형식이 맞지 않습니다.');if(!confirm('현재 기록과 루틴을 백업 파일로 교체할까요?'))return;state={...state,...data,groupNames:Array.isArray(data.groupNames)?data.groupNames:clone(GROUPS),running:false,lastTick:null,phase:'prep',prepRemain:PREP_SECONDS,reminders:[]};while(state.groupNames.length<state.groups.length)state.groupNames.push('새 섹션');state.groupNames=state.groupNames.slice(0,state.groups.length);state.index=Math.max(0,Math.min(steps().length-1,Number(state.index)||0));state.remain=Math.max(0,Number(state.remain)||0);setPreparation(state.index);save();updateGroups();syncPrepEditor();metricsLoad();paint();renderHistory();alert('복원 완료');}catch(err){alert('복원 실패: '+err.message)}finally{e.target.value=''}});
+$('#import').addEventListener('change',async e=>{const f=e.target.files[0];if(!f)return;try{const obj=JSON.parse(await f.text());const data=obj.data||obj;if(!Array.isArray(data.groups)||!data.groups.length||!data.history)throw Error('파일 형식이 맞지 않습니다.');if(!confirm('현재 기록과 루틴을 백업 파일로 교체할까요?'))return;state={...state,...data,groupNames:Array.isArray(data.groupNames)?data.groupNames:clone(GROUPS),running:false,lastTick:null,phase:'prep',prepRemain:PREP_SECONDS,reminders:[]};while(state.groupNames.length<state.groups.length)state.groupNames.push('새 섹션');state.groupNames=state.groupNames.slice(0,state.groups.length);state.groupVisuals=Array.isArray(data.groupVisuals)?data.groupVisuals.slice(0,state.groups.length):clone(DEFAULT_VISUALS);while(state.groupVisuals.length<state.groups.length)state.groupVisuals.push('vocabulary');state.index=Math.max(0,Math.min(steps().length-1,Number(state.index)||0));state.remain=Math.max(0,Number(state.remain)||0);setPreparation(state.index);save();updateGroups();syncPrepEditor();metricsLoad();paint();renderHistory();alert('복원 완료');}catch(err){alert('복원 실패: '+err.message)}finally{e.target.value=''}});
 window.addEventListener('pagehide',()=>{tick();save()});document.addEventListener('visibilitychange',()=>{if(!document.hidden){tick();metricsLoad()}});
 // A new document load (including refresh) always starts at step 1 preparation.
 // Keep routine configuration and historical metrics, never restore the active session.
